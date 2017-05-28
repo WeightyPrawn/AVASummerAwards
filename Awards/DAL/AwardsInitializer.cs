@@ -53,7 +53,7 @@ namespace Awards.DAL
                 new Vote { NomineeID=2, Voter="voter3@avanade.com" },
                 new Vote { NomineeID=4, Voter="voter4@avanade.com" },
             };
-            nominees.ForEach(s => context.Nominees.Add(s));
+            votes.ForEach(s => context.Votes.Add(s));
             context.SaveChanges();
         }
     }

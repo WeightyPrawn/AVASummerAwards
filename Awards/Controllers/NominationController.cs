@@ -17,9 +17,50 @@ namespace Awards.Controllers
     {
         private AwardsContext db = new AwardsContext();
 
-        // POST: api/Nomination
+        [HttpGet]
+        public List<GetCategoryDTO> GetNominationsForUser(string user)
+        {
+            //TODO: Get requesting user e-mail from claims
+            //var user = "";
+
+            List<GetCategoryDTO> nominations = db.Categories
+                .Where(
+                    o => o.Nominees.Any(
+                        p => p.Nominations.Any(
+                            q => q.Nominator == user
+                        )
+                    )
+                )
+                .Select(o => new GetCategoryDTO
+                {
+                    ID = o.ID,
+                    Name = o.Name,
+                    Nominees = o.Nominees
+                        .Where(p => p.Nominations.Any(q => q.Nominator == user))
+                        .Select(p => new GetNomineeDTO
+                        {
+                            CategoryID = p.CategoryID,
+                            NomineeEmail = p.Email,
+                            Nominations = p.Nominations
+                                .Where(q => q.Nominator == user)
+                                .Select(r => new GetNominationDTO
+                                {
+                                    ID = r.ID,
+                                    Anonymous = r.Anonymous,
+                                    Nominator = r.Nominator,
+                                    NomineeID = r.NomineeID,
+                                    Reason = r.Reason
+                                }).ToList()
+                        }).ToList()
+
+                }).ToList();
+
+            return nominations;
+        }
+
+        [HttpPost]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> AddNomination(NomineeDTO nominee)
+        public async Task<IHttpActionResult> AddNomination(SetNomineeDTO nominee)
         {
             if (!ModelState.IsValid)
             {
@@ -27,9 +68,16 @@ namespace Awards.Controllers
             }
             //TODO: Get nominating user from claims
             var nominator = "";
-            var existingNominee = db.Nominees.FirstOrDefault(o => o.CategoryID == nominee.CategoryID && o.Email == nominee.Email);
+            var existingNominee = db.Nominees.FirstOrDefault(
+                o => o.CategoryID == nominee.CategoryID && o.Email == nominee.NomineeEmail);
             if (existingNominee != null)
             {
+                if(existingNominee.Nominations.Any(o => o.Nominator == nominator))
+                {
+                    var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    response.ReasonPhrase = "You have already nominated this person in this category";
+                    return ResponseMessage(response);
+                }
                 var newNomination = new Nomination
                 {
                     NomineeID = existingNominee.ID,
@@ -44,9 +92,8 @@ namespace Awards.Controllers
                 var newNominee = new Nominee
                 {
                     CategoryID = nominee.CategoryID,
-                    Email = nominee.Email,
-                    Name = nominee.Name,
-                    Nominations = new List<Nomination>()
+                    Email = nominee.NomineeEmail,
+                    Name = "", //TODO: Get name from AD based on Email.
                 };
                 newNominee.Nominations.Add(new Nomination
                 {
@@ -63,9 +110,9 @@ namespace Awards.Controllers
             return Ok();
         }
 
-        // PUT: api/Nominations/5
+        [HttpPut]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNomination(int id, NominationDTO nomination)
+        public async Task<IHttpActionResult> PutNomination(int id, SetNominationDTO nomination)
         {
             if (!ModelState.IsValid)
             {
@@ -77,8 +124,8 @@ namespace Awards.Controllers
             {
                 return NotFound();
             }
-            
-            if(!IsUserAuthorized(existingNomination.Nominator))
+
+            if (!IsUserAuthorized(existingNomination.Nominator))
             {
                 return Unauthorized();
             }
@@ -108,7 +155,7 @@ namespace Awards.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // DELETE: api/Nominations/5
+        // DELETE: api/Nomination
         [ResponseType(typeof(Nomination))]
         public async Task<IHttpActionResult> DeleteNomination(int id)
         {
@@ -124,7 +171,7 @@ namespace Awards.Controllers
             db.Nominations.Remove(nomination);
             await db.SaveChangesAsync();
             var nominee = await db.Nominees.FindAsync(nomination.NomineeID);
-            if(nominee.Nominations.Count < 1)
+            if (nominee.Nominations.Count < 1)
             {
                 db.Nominees.Remove(nominee);
                 await db.SaveChangesAsync();

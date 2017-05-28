@@ -5,11 +5,10 @@ using System.Web;
 
 namespace Awards.Models
 {
-    public class NomineeDTO
+    public class GetCategoryDTO
     {
-        public int CategoryID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public NominationDTO Nomination { get; set; }
+        public IEnumerable<GetNomineeDTO> Nominees { get; set; }
     }
 }

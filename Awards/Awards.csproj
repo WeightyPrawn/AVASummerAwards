@@ -142,16 +142,17 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\NominationController.cs" />
-    <Compile Include="Controllers\NominationsController.cs" />
-    <Compile Include="Controllers\NomineesController.cs" />
     <Compile Include="Controllers\VotesController.cs" />
     <Compile Include="DAL\AwardsContext.cs" />
     <Compile Include="DAL\AwardsInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\NominationDTO.cs" />
-    <Compile Include="Models\NomineeDTO.cs" />
+    <Compile Include="Models\GetCategoryDTO.cs" />
+    <Compile Include="Models\SetNomineeDTO.cs" />
+    <Compile Include="Models\SetNominationDTO.cs" />
+    <Compile Include="Models\GetNominationDTO.cs" />
+    <Compile Include="Models\GetNomineeDTO.cs" />
     <Compile Include="Models\Nominee.cs" />
     <Compile Include="Models\Vote.cs" />
     <Compile Include="Models\Nomination.cs" />

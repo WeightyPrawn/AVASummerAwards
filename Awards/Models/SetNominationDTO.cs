@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Awards.Models
 {
-    public class NominationDTO
+    public class SetNominationDTO
     {
         public string Reason { get; set; }
         public bool Anonymous { get; set; }
