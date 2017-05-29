@@ -14,16 +14,33 @@ using Awards.Models;
 
 namespace Awards.Controllers
 {
+    [Authorize]
     public class CategoriesController : ApiController
     {
         private AwardsContext db = new AwardsContext();
 
         // GET: api/Categories
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<GetCategoryDTO> GetCategories()
         {
-            var test = db.Categories;
-            var test2 = test.ToList();
-            return test2;
+            var categories = db.Categories.Select(s => new GetCategoryDTO
+            {
+                ID = s.ID,
+                Name = s.Name,
+                Nominees = s.Nominees.Select(t => new GetNomineeDTO
+                {
+                    CategoryID = t.CategoryID,
+                    NomineeEmail = t.Email,
+                    Nominations = t.Nominations.Select(u => new GetNominationDTO
+                    {
+                        Anonymous = u.Anonymous,
+                        ID = u.ID,
+                        Nominator = u.Nominator,
+                        NomineeID = u.NomineeID,
+                        Reason = u.Reason
+                    })
+                })
+            });
+            return categories.ToList();
         }
 
         // GET: api/Categories/5
