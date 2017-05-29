@@ -11,10 +11,12 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Awards.DAL;
 using Awards.Models;
+using System.Web.Http.Cors;
 
 namespace Awards.Controllers
 {
     [Authorize]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CategoriesController : ApiController
     {
         private AwardsContext db = new AwardsContext();

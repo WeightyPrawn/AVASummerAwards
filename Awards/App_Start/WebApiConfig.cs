@@ -12,6 +12,8 @@ namespace Awards
         {
             // Web API configuration and services
 
+            config.EnableCors();
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -28,6 +30,7 @@ namespace Awards
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
         }
     }
 }
