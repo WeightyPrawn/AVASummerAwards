@@ -11,9 +11,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Awards.DAL;
 using Awards.Models;
+using System.Web.Http.Cors;
 
 namespace Awards.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class VotesController : ApiController
     {
         private AwardsContext db = new AwardsContext();

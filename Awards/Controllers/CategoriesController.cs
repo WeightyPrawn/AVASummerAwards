@@ -15,7 +15,7 @@ using System.Web.Http.Cors;
 
 namespace Awards.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CategoriesController : ApiController
     {
