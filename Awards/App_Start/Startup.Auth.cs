@@ -17,7 +17,10 @@ namespace Awards
                 new WindowsAzureActiveDirectoryBearerAuthenticationOptions
                 {
                     Audience = ConfigurationManager.AppSettings["ida:Audience"],
-                    Tenant = ConfigurationManager.AppSettings["ida:Tenant"]
+                    Tenant = ConfigurationManager.AppSettings["ida:Tenant"],
+
+                    //additional code for Multi-tenancy
+                    TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters() { ValidateIssuer = false }
                 });
         }
     }
