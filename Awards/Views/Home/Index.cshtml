@@ -1,0 +1,69 @@
+﻿<div ng-app="AvaSummerAwards" ng-cloak>
+    <div class="container" ng-controller="MainController as ctrl">
+        <h1>Avanade Summer Awards!</h1>
+
+        <div>
+            <hr />
+            <h2>Kategorier</h2>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><strong>Titel</strong></td>
+                        <td><strong>Beskrivning</strong></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="category in ctrl.data.categories">
+                        <td>{{category.Name}}</td>
+                        <td>{{category.Description}}</td>
+                        <td><button class="btn btn-default btn-small" disabled>Nominera</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div>
+            <hr />
+            <h2>Nominering</h2>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><strong>Kategori</strong></td>
+                        <td><strong>Nomineringar</strong></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="category in ctrl.data.categories">
+                        <td>{{category.Name}}</td>
+                        <td>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>Nominerad</td>
+                                        <td>Motivering</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="nomination in category.Nominees">
+                                        <td>{{nomination.NomineeEmail}}</td>
+                                        <td>{{nomination.NominationText}}</td>
+                                        <td class="pull-right">
+                                            <button class="btn btn-small btn-success" data-ng-click="ctrl.vote(category, nomination)">Rösta</button>
+                                            <button class="btn btn-small btn-danger" data-ng-click="ctrl.removeVote(category, nomination)">Ta bort röst</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

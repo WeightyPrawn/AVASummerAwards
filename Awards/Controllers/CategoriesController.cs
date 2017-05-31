@@ -46,6 +46,7 @@ namespace Awards.Controllers
             return categories.ToList();
         }*/
         // GET: api/Categories
+        [HttpGet, ActionName("categories")]
         public IEnumerable<GetCategoryDTO> GetCategories(string user)
         {
             List<GetCategoryDTO> response = db.Categories
