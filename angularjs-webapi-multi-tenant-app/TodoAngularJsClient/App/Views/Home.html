@@ -1,0 +1,13 @@
+﻿<div ng-show="signupProcessCompleted == false">
+    You MUST be an active directory administrator to signup. System will present you an consent screen on behalf of users.<br/>
+    <input type="button" value="Signup" ng-click="signup();"/>
+</div>
+
+<div ng-show="signupProcessCompleted == true">
+    Tenant Id: <b>{{userInfo.profile.tid}}</b><br/>
+    Given Name: <b>{{userInfo.profile.given_name}}</b><br/>
+    Surname Name: <b>{{userInfo.profile.family_name}}</b><br/>
+
+    <br/><br/>
+    Signup process completed.
+</div>
