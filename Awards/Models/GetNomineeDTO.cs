@@ -7,6 +7,7 @@ namespace Awards.Models
 {
     public class GetNomineeDTO
     {
+        public int ID { get; set; }
         public int CategoryID { get; set; }
         public string NomineeEmail { get; set; }
         public string NomineeName { get; set; }
