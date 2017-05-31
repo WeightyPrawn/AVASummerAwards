@@ -1,1 +1,40 @@
-﻿
+﻿body {
+    background: lightgrey;
+}
+nav {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+a:focus {
+    text-decoration: none;
+}
+
+main {
+    margin: 0 auto;
+    margin-top: -20px;
+    padding-top: 20px;
+    background: white;
+    max-width: 845px;
+}
+
+.main-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.panel-body {
+    padding: 0;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 450px) {
+  .hidden-xxs {
+    display: none !important;
+  }
+}

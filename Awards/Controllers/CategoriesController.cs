@@ -60,8 +60,9 @@ namespace Awards.Controllers
                             {
                                 ID = p.ID,
                                 CategoryID = p.CategoryID,
-                                NomineeEmail = p.Email,
-                                NomineeName = p.Name,
+                                Email = p.Email,
+                                Name = p.Name,
+                                Image = p.Image,
                                 Nominations = p.Nominations
                                     .Select(r => new GetNominationDTO
                                     {

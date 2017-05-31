@@ -1,4 +1,44 @@
-﻿<div ng-app="AvaSummerAwards" ng-cloak>
+﻿<div class="main-content" ng-app="AvaSummerAwards" ng-controller="MainController as ctrl" ng-cloak>
+    <div ng-repeat="category in ctrl.data.categories">
+        <h2>{{category.Name}}</h2>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"
+             ng-repeat="nominee in category.Nominees">
+            <div class="panel panel-default container-fluid">
+                <div class="panel-heading row vertical-align" role="tab" id="heading-{{$parent.$index}}-{{$index}}">
+                    <a class="collapsed col-xs-9 col-sm-10" role="button" data-toggle="collapse"
+                       data-parent="#accordion" href="#collapse-{{$parent.$index}}-{{$index}}" aria-expanded="false"
+                       aria-controls="collapse-{{$parent.$index}}-{{$index}}">
+                        <div class="row vertical-align">
+                            <div class="col-xs-4 hidden-xxs" style="padding-left:0">
+                                <img ng-src="{{nominee.Image}}"
+                                     class="img-responsive img-circle">
+                            </div>
+                            <h4 class="panel-title col-xs-8" style="padding:6px">
+                                {{nominee.Name}}
+                            </h4>
+                        </div>
+                    </a>
+                    <button class="col-xs-3 col-sm-2 btn btn-default" data-ng-click="ctrl.vote(nominee)"
+                            data-ng-hide="category.HasVoted">
+                        Vote
+                    </button>
+                    <button class="col-xs-3 col-sm-2 btn btn-danger" data-ng-click="ctrl.removeVote(nominee)"
+                            data-ng-show="nominee.Vote !== null">
+                        Undo
+                    </button>
+                </div>
+                <div id="collapse-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse" role="tabpanel"
+                     aria-labelledby="heading-{{$parent.$index}}-{{index}}">
+                    <div class="panel-body">
+                        <p ng-repeat="nomination in nominee.Nominations"><em>"{{nomination.Reason}}"</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<div ng-app="AvaSummerAwards" ng-cloak>
     <div class="container" ng-controller="MainController as ctrl">
         <h1>Avanade Summer Awards!</h1>
 
@@ -49,12 +89,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="nomination in category.Nominees">
-                                        <td>{{nomination.NomineeEmail}}</td>
-                                        <td>{{nomination.NominationText}}</td>
+                                    <tr ng-repeat="nominee in category.Nominees">
+                                        <td>{{nominee.NomineeName}}</td>
+                                        <td><span ng-repeat="nomination in nominee.Nominations">{{nomination.Reason}}</span></td>
                                         <td class="pull-right">
-                                            <button class="btn btn-small btn-success" data-ng-click="ctrl.vote(category, nomination)">Rösta</button>
-                                            <button class="btn btn-small btn-danger" data-ng-click="ctrl.removeVote(category, nomination)">Ta bort röst</button>
+                                            <button class="btn btn-small btn-success" data-ng-click="ctrl.vote(nominee)" data-ng-hide="category.HasVoted">Rösta</button>
+                                            <button class="btn btn-small btn-danger" data-ng-click="ctrl.removeVote(nominee)" data-ng-show="nominee.Vote !== null">Ta bort röst</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -67,3 +107,4 @@
         </div>
     </div>
 </div>
+-->

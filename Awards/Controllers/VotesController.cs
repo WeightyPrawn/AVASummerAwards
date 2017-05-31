@@ -82,19 +82,20 @@ namespace Awards.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var currentUser = ""; //Get from Claims
             var nominee = await db.Nominees.FindAsync(vote.NomineeID);
-            if(nominee.Votes.Any(o => o.Voter == currentUser))
+            if (nominee.Votes.Any(o => o.Voter == user))
             {
-                var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
-                response.ReasonPhrase = "You have already voted for a nominee in this category";
+                var response = Request.CreateResponse(
+                    HttpStatusCode.Forbidden,
+                    "You have already voted for a nominee in this category"
+                    );
                 return ResponseMessage(response);
             }
 
             db.Votes.Add(new Vote
             {
                 NomineeID = vote.NomineeID,
-                Voter = currentUser
+                Voter = user
             });
             await db.SaveChangesAsync();
 
@@ -112,8 +113,10 @@ namespace Awards.Controllers
             }
             if (vote.Voter != user)
             {
-                var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
-                response.ReasonPhrase = "You cannot delete other peoples votes.";
+                var response = Request.CreateResponse(
+                    HttpStatusCode.Forbidden,
+                    "You cannot delete other peoples votes."
+                    );
                 return ResponseMessage(response);
             }
 

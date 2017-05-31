@@ -42,7 +42,7 @@ namespace Awards.Controllers
                         .Select(p => new GetNomineeDTO
                         {
                             CategoryID = p.CategoryID,
-                            NomineeEmail = p.Email,
+                            Email = p.Email,
                             Nominations = p.Nominations
                                 .Where(q => q.Nominator == user)
                                 .Select(r => new GetNominationDTO
