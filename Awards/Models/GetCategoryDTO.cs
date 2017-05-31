@@ -9,6 +9,8 @@ namespace Awards.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
+        public bool HasVoted { get; set; }
         public IEnumerable<GetNomineeDTO> Nominees { get; set; }
     }
 }

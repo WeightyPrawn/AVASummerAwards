@@ -13,10 +13,10 @@ namespace Awards.DAL
         {
             var categories = new List<Category>
             {
-                new Category {Name="Category1"},
-                new Category {Name="Category2"},
-                new Category {Name="Category3"},
-                new Category {Name="Category4"}
+                new Category {Name="Category1", Description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus augue lectus, sit amet eleifend augue elementum eget. Nullam sed odio eleifend, dictum nisl a, sodales neque. Nulla ac eros sed felis pulvinar ullamcorper sed a erat. Nam auctor, enim sed viverra viverra, orci augue gravida lectus, id vestibulum nisl lectus in lorem. Integer tortor enim, luctus in mi sit amet, luctus elementum turpis. Mauris commodo sed ipsum eu aliquam. Nullam viverra nulla velit, et placerat purus mollis rhoncus. Mauris et consectetur elit, non malesuada quam."},
+                new Category {Name="Category2", Description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus augue lectus, sit amet eleifend augue elementum eget. Nullam sed odio eleifend, dictum nisl a, sodales neque. Nulla ac eros sed felis pulvinar ullamcorper sed a erat. Nam auctor, enim sed viverra viverra, orci augue gravida lectus, id vestibulum nisl lectus in lorem. Integer tortor enim, luctus in mi sit amet, luctus elementum turpis. Mauris commodo sed ipsum eu aliquam. Nullam viverra nulla velit, et placerat purus mollis rhoncus. Mauris et consectetur elit, non malesuada quam."},
+                new Category {Name="Category3", Description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus augue lectus, sit amet eleifend augue elementum eget. Nullam sed odio eleifend, dictum nisl a, sodales neque. Nulla ac eros sed felis pulvinar ullamcorper sed a erat. Nam auctor, enim sed viverra viverra, orci augue gravida lectus, id vestibulum nisl lectus in lorem. Integer tortor enim, luctus in mi sit amet, luctus elementum turpis. Mauris commodo sed ipsum eu aliquam. Nullam viverra nulla velit, et placerat purus mollis rhoncus. Mauris et consectetur elit, non malesuada quam."},
+                new Category {Name="Category4", Description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus augue lectus, sit amet eleifend augue elementum eget. Nullam sed odio eleifend, dictum nisl a, sodales neque. Nulla ac eros sed felis pulvinar ullamcorper sed a erat. Nam auctor, enim sed viverra viverra, orci augue gravida lectus, id vestibulum nisl lectus in lorem. Integer tortor enim, luctus in mi sit amet, luctus elementum turpis. Mauris commodo sed ipsum eu aliquam. Nullam viverra nulla velit, et placerat purus mollis rhoncus. Mauris et consectetur elit, non malesuada quam."}
             };
 
             categories.ForEach(s => context.Categories.Add(s));

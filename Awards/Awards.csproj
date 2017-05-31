@@ -166,6 +166,8 @@
     <Compile Include="Models\GetNominationDTO.cs" />
     <Compile Include="Models\GetNomineeDTO.cs" />
     <Compile Include="Models\Nominee.cs" />
+    <Compile Include="Models\GetVoteDTO.cs" />
+    <Compile Include="Models\SetVoteDTO.cs" />
     <Compile Include="Models\Vote.cs" />
     <Compile Include="Models\Nomination.cs" />
     <Compile Include="Models\Category.cs" />

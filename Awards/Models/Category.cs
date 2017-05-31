@@ -9,6 +9,7 @@ namespace Awards.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public virtual ICollection<Nominee> Nominees { get; set; }
     }
 }

@@ -15,19 +15,20 @@ using System.Web.Http.Cors;
 
 namespace Awards.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CategoriesController : ApiController
     {
         private AwardsContext db = new AwardsContext();
 
         // GET: api/Categories
-        public IEnumerable<GetCategoryDTO> GetCategories()
+        /* public IEnumerable<GetCategoryDTO> GetCategories()
         {
             var categories = db.Categories.Select(s => new GetCategoryDTO
             {
                 ID = s.ID,
                 Name = s.Name,
+                Description = s.Description,
                 Nominees = s.Nominees.Select(t => new GetNomineeDTO
                 {
                     CategoryID = t.CategoryID,
@@ -43,6 +44,42 @@ namespace Awards.Controllers
                 })
             });
             return categories.ToList();
+        }*/
+        // GET: api/Categories
+        public IEnumerable<GetCategoryDTO> GetCategories(string user)
+        {
+            List<GetCategoryDTO> response = db.Categories
+                    .Select(o => new GetCategoryDTO
+                    {
+                        ID = o.ID,
+                        Name = o.Name,
+                        Description = o.Description,
+                        Nominees = o.Nominees
+                            .Select(p => new GetNomineeDTO
+                            {
+                                CategoryID = p.CategoryID,
+                                NomineeEmail = p.Email,
+                                Nominations = p.Nominations
+                                    .Select(r => new GetNominationDTO
+                                    {
+                                        ID = r.ID,
+                                        Anonymous = r.Anonymous,
+                                        Nominator = r.Nominator,
+                                        NomineeID = r.NomineeID,
+                                        Reason = r.Reason
+                                    }).ToList(),
+                                Vote = p.Votes
+                                    .Where(q => q.Voter == user)
+                                    .Select(r => new GetVoteDTO
+                                    {
+                                        ID = r.ID,
+                                        NomineeID = r.NomineeID,
+                                        Voter = r.Voter
+                                    }).FirstOrDefault()
+                            }).ToList()
+                    }).ToList();
+            response.ForEach(o => o.HasVoted = o.Nominees.Any(p => p.Vote != null));
+            return response;
         }
 
         // GET: api/Categories/5
