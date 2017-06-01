@@ -1,4 +1,5 @@
-﻿<html xmlns="http://www.w3.org/1999/xhtml">
+﻿@using System.Configuration;
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,6 +47,9 @@
                 crossorigin="anonymous"></script>
         <script src="~/Content/adal.js"></script>
         <script src="~/Content/adal-angular.js"></script>
+        <script>
+            var siteAddress = "@ConfigurationManager.AppSettings["siteAddress"]";
+        </script>
         <script src="~/Content/app.js"></script>
     </main>
     <footer class="container">

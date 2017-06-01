@@ -7,24 +7,23 @@
 angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
     .config(['$routeProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
         function ($routeProvider, $httpProvider, adalProvider) {
-            $routeProvider.when("/Home",
+            $routeProvider.when("/Login",
                 {
                     controller: "MainController",
                     template: "<div>hej</div>"
                 })
-                .when("/App",
+                .when("/",
                 {
                     controller: "AppController",
                     templateUrl: "/App",
                     requireADLogin: true,
                 })
-                .otherwise({ redirectTo: "/Home" });
+                .otherwise({ redirectTo: "/Login" });
             var endpoints = {
                 // Map the location of a request to an API to a the identifier of the associated resource
                 //url:apiResourceId
-                "https://localhost:44375/":
-                    "https://marcusengelhartavanade.onmicrosoft.com/AvaSummerAwards"
             };
+            endpoints[siteAddress] = "https://marcusengelhartavanade.onmicrosoft.com/AvaSummerAwards";
 
             adalProvider.init(
                 {
@@ -52,12 +51,12 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
             });
         };
         $scope.login = function () {
-            $location.path('/App');
+            $location.path('/');
             console.log($rootScope.userInfo)
         };
     }])
     .factory('VoteService', ['$http', function ($http) {
-        var apiBaseUrl = 'https://localhost:44375/';
+        var apiBaseUrl = siteAddress;
         var data = {};
 
         var URLS = {
