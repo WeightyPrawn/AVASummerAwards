@@ -161,7 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\adal-angular.js" />
+    <Content Include="Content\adal-angular.min.js" />
     <Content Include="Content\adal.js" />
+    <Content Include="Content\adal.min.js" />
     <Content Include="Content\app.js" />
     <Content Include="Content\site.css" />
     <Content Include="Global.asax" />

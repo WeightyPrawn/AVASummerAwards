@@ -7,18 +7,14 @@
 angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
     .config(['$routeProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
         function ($routeProvider, $httpProvider, adalProvider) {
-            $routeProvider.when("/Login",
-                {
-                    controller: "MainController",
-                    template: "<div>hej</div>"
-                })
+            $routeProvider
                 .when("/",
                 {
                     controller: "AppController",
                     templateUrl: "/App",
                     requireADLogin: true,
                 })
-                .otherwise({ redirectTo: "/Login" });
+                .otherwise({ redirectTo: "" });
             var endpoints = {
                 // Map the location of a request to an API to a the identifier of the associated resource
                 //url:apiResourceId
@@ -30,7 +26,6 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
                     instance: 'https://login.microsoftonline.com/',
                     tenant: 'common', //for multi-tenant
                     clientId: '884c99db-e371-4707-be34-56b1c064db0f', //copy from Azure active directory application for this client
-                    extraQueryParameter: '',
                     endpoints: endpoints
                     //cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
                 },
@@ -43,12 +38,14 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
 
         $scope.vote = VoteService.vote;
         $scope.removeVote = VoteService.removeVote;
+        $scope.$on("adal:loginFailure", function () {
+            console.log("login failure");
+            adalService.login();
+        });
 
     }]).controller('MainController', ['$scope', '$rootScope', 'adalAuthenticationService', '$location', function ($scope, $rootScope, adalService, $location) {
         $scope.logout = function () {
-            adalService.logOut().then(function () {
-                console.log("hej");
-            });
+            adalService.logOut();
         };
         $scope.login = function () {
             $location.path('/');
@@ -71,6 +68,9 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
             $http.get(apiBaseUrl + URLS.CATEGORIES).success(function (resp) {
                 data.categories = resp;
                 console.log(data);
+            }).error(function (error) {
+                console.log(error);
+                alert("Please allow 3rd party cookies to use app.");
             });
         };
         init();
