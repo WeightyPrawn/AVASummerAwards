@@ -1,6 +1,7 @@
 ﻿body {
     background: lightgrey;
 }
+
 nav {
     max-width: 850px;
     margin: 0 auto;
@@ -36,4 +37,15 @@ main {
 .vertical-align {
     display: flex;
     align-items: center;
+}
+
+h4.panel-title {
+    padding-right: 15px;
+    padding-left: 0;
+}
+
+@media (min-width: 768px) {
+    h4.panel-title {
+        padding-left: 15px;
+    }
 }
