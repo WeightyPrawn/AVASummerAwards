@@ -186,6 +186,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AuthHelper.cs" />
     <Compile Include="Models\GetCategoryDTO.cs" />
     <Compile Include="Models\SetNomineeDTO.cs" />
     <Compile Include="Models\SetNominationDTO.cs" />

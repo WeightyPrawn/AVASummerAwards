@@ -1,4 +1,5 @@
 ﻿using Awards.DAL;
+using Awards.Helpers;
 using Awards.Models;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -14,16 +16,20 @@ using System.Web.Http.Description;
 
 namespace Awards.Controllers
 {
+    [Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class NominationController : ApiController
     {
         private AwardsContext db = new AwardsContext();
-
+        /*
         [HttpGet]
-        public List<GetCategoryDTO> GetNominationsForUser(string user)
+        public List<GetCategoryDTO> GetNominationsForUser()
         {
-            //TODO: Get requesting user e-mail from claims
-            //var user = "";
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
 
             List<GetCategoryDTO> nominations = db.Categories
                 .Where(
@@ -59,22 +65,26 @@ namespace Awards.Controllers
 
             return nominations;
         }
-
+        */
         [HttpPost]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> AddNomination(SetNomineeDTO nominee)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            //TODO: Get nominating user from claims
-            var nominator = "";
+
             var existingNominee = db.Nominees.FirstOrDefault(
                 o => o.CategoryID == nominee.CategoryID && o.Email == nominee.NomineeEmail);
             if (existingNominee != null)
             {
-                if(existingNominee.Nominations.Any(o => o.Nominator == nominator))
+                if(existingNominee.Nominations.Any(o => o.Nominator == user))
                 {
                     var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
                     response.ReasonPhrase = "You have already nominated this person in this category";
@@ -84,7 +94,7 @@ namespace Awards.Controllers
                 {
                     NomineeID = existingNominee.ID,
                     Anonymous = nominee.Nomination.Anonymous,
-                    Nominator = nominator,
+                    Nominator = user,
                     Reason = nominee.Nomination.Reason
                 };
                 db.Nominations.Add(newNomination);
@@ -101,7 +111,7 @@ namespace Awards.Controllers
                 {
 
                     Anonymous = nominee.Nomination.Anonymous,
-                    Nominator = nominator,
+                    Nominator = user,
                     Reason = nominee.Nomination.Reason
                 });
 
@@ -116,6 +126,11 @@ namespace Awards.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutNomination(int id, SetNominationDTO nomination)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -127,11 +142,12 @@ namespace Awards.Controllers
                 return NotFound();
             }
 
+            /*
             if (!IsUserAuthorized(existingNomination.Nominator))
             {
                 return Unauthorized();
             }
-
+            */
             var updatedNomination = existingNomination;
             updatedNomination.Anonymous = nomination.Anonymous;
             updatedNomination.Reason = nomination.Reason;
@@ -161,15 +177,22 @@ namespace Awards.Controllers
         [ResponseType(typeof(Nomination))]
         public async Task<IHttpActionResult> DeleteNomination(int id)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
             Nomination nomination = await db.Nominations.FindAsync(id);
             if (nomination == null)
             {
                 return NotFound();
             }
+            /*
             if (!IsUserAuthorized(nomination.Nominator))
             {
                 return Unauthorized();
             }
+            */
             db.Nominations.Remove(nomination);
             await db.SaveChangesAsync();
             var nominee = await db.Nominees.FindAsync(nomination.NomineeID);
@@ -194,17 +217,6 @@ namespace Awards.Controllers
         private bool NominationExists(int id)
         {
             return db.Nominations.Count(e => e.ID == id) > 0;
-        }
-
-        private bool IsUserAuthorized(string user)
-        {
-            //TODO get Requesting user email from Claims
-            var userEmail = "";
-            if (user != userEmail)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

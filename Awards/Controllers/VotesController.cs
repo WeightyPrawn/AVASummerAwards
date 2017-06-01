@@ -13,6 +13,7 @@ using Awards.DAL;
 using Awards.Models;
 using System.Web.Http.Cors;
 using System.Security.Claims;
+using Awards.Helpers;
 
 namespace Awards.Controllers
 {
@@ -22,65 +23,15 @@ namespace Awards.Controllers
     {
         private AwardsContext db = new AwardsContext();
 
-        // GET: api/Votes
-        public IEnumerable<Vote> GetVotes()
-        {
-            return db.Votes.ToList();
-        }
-
-        // GET: api/Votes/5
-        [ResponseType(typeof(Vote))]
-        public async Task<IHttpActionResult> GetVote(int id)
-        {
-            Vote vote = await db.Votes.FindAsync(id);
-            if (vote == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(vote);
-        }
-
-        // PUT: api/Votes/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutVote(int id, Vote vote)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != vote.ID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(vote).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!VoteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: api/Votes
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PostVote(SetVoteDTO vote)
         {
             var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsValidUserDomain(user))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -110,6 +61,10 @@ namespace Awards.Controllers
         public async Task<IHttpActionResult> DeleteVote(int id)
         {
             var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsValidUserDomain(user))
+            {
+                return Unauthorized();
+            }
             Vote vote = await db.Votes.FindAsync(id);
             if (vote == null)
             {

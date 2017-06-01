@@ -4,41 +4,43 @@
 
 <div class="main-content" ng-cloak>
     <div ng-repeat="category in data.categories">
-        <h2>{{category.Name}}</h2>
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"
-             ng-repeat="nominee in category.Nominees">
-            <div class="panel panel-default container-fluid">
-                <div class="panel-heading row vertical-align" role="tab" id="heading-{{$parent.$index}}-{{$index}}">
-                    <a class="collapsed col-xs-9 col-sm-10" role="button" data-toggle="collapse"
-                       data-parent="#accordion" data-target="#collapse-{{$parent.$index}}-{{$index}}" aria-expanded="false"
-                       aria-controls="collapse-{{$parent.$index}}-{{$index}}">
-                        <div class="row vertical-align">
-                            <div class="col-sm-4 hidden-xs" style="padding-left:0">
-                                <img ng-src="{{nominee.Image}}"
-                                     class="img-responsive img-circle">
+        <details>
+            <summary><h2>{{category.Name}}</h2></summary>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"
+                 ng-repeat="nominee in category.Nominees">
+                <div class="panel panel-default container-fluid">
+                    <div class="panel-heading row vertical-align" role="tab" id="heading-{{$parent.$index}}-{{$index}}">
+                        <a class="collapsed col-xs-9 col-sm-10" role="button" data-toggle="collapse"
+                           data-parent="#accordion" data-target="#collapse-{{$parent.$index}}-{{$index}}" aria-expanded="false"
+                           aria-controls="collapse-{{$parent.$index}}-{{$index}}">
+                            <div class="row vertical-align">
+                                <div class="col-sm-4 hidden-xs" style="padding-left:0">
+                                    <img ng-src="{{nominee.Image}}"
+                                         class="img-responsive img-circle">
+                                </div>
+                                <h4 class="panel-title col-xs-12 col-sm-8">
+                                    {{nominee.Name}}
+                                </h4>
                             </div>
-                            <h4 class="panel-title col-xs-12 col-sm-8">
-                                {{nominee.Name}}
-                            </h4>
+                        </a>
+                        <button class="col-xs-3 col-sm-2 btn btn-default" ng-click="vote(nominee)"
+                                ng-hide="category.HasVoted">
+                            Vote
+                        </button>
+                        <button class="col-xs-3 col-sm-2 btn btn-danger" ng-click="removeVote(nominee)"
+                                ng-show="nominee.Vote !== null">
+                            Undo
+                        </button>
+                    </div>
+                    <div id="collapse-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse" role="tabpanel"
+                         aria-labelledby="heading-{{$parent.$index}}-{{index}}">
+                        <div class="panel-body">
+                            <p ng-repeat="nomination in nominee.Nominations"><em>"{{nomination.Reason}}"</em></p>
                         </div>
-                    </a>
-                    <button class="col-xs-3 col-sm-2 btn btn-default" ng-click="vote(nominee)"
-                            ng-hide="category.HasVoted">
-                        Vote
-                    </button>
-                    <button class="col-xs-3 col-sm-2 btn btn-danger" ng-click="removeVote(nominee)"
-                            ng-show="nominee.Vote !== null">
-                        Undo
-                    </button>
-                </div>
-                <div id="collapse-{{$parent.$index}}-{{$index}}" class="panel-collapse collapse" role="tabpanel"
-                     aria-labelledby="heading-{{$parent.$index}}-{{index}}">
-                    <div class="panel-body">
-                        <p ng-repeat="nomination in nominee.Nominations"><em>"{{nomination.Reason}}"</em></p>
                     </div>
                 </div>
             </div>
-        </div>
+        </details>
     </div>
 </div>
 <!--

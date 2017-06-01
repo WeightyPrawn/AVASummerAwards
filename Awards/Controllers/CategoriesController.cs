@@ -13,6 +13,8 @@ using Awards.DAL;
 using Awards.Models;
 using System.Web.Http.Cors;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
+using Awards.Helpers;
 
 namespace Awards.Controllers
 {
@@ -23,36 +25,16 @@ namespace Awards.Controllers
         private AwardsContext db = new AwardsContext();
 
         // GET: api/Categories
-        /* public IEnumerable<GetCategoryDTO> GetCategories()
-        {
-            var categories = db.Categories.Select(s => new GetCategoryDTO
-            {
-                ID = s.ID,
-                Name = s.Name,
-                Description = s.Description,
-                Nominees = s.Nominees.Select(t => new GetNomineeDTO
-                {
-                    CategoryID = t.CategoryID,
-                    NomineeEmail = t.Email,
-                    Nominations = t.Nominations.Select(u => new GetNominationDTO
-                    {
-                        Anonymous = u.Anonymous,
-                        ID = u.ID,
-                        Nominator = u.Nominator,
-                        NomineeID = u.NomineeID,
-                        Reason = u.Reason
-                    })
-                })
-            });
-            return categories.ToList();
-        }*/
-        // GET: api/Categories
-        [HttpGet, ActionName("categories")]
-        public IEnumerable<GetCategoryDTO> GetCategories()
+        [ResponseType(typeof(GetCategoryDTO))]
+        public async Task<IHttpActionResult> GetCategories()
         {
             var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if(!AuthHelper.IsValidUserDomain(user))
+            {
+                return Unauthorized();
+            }
             // var name = ClaimsPrincipal.Current.FindFirst("name").Value;
-            List<GetCategoryDTO> response = db.Categories
+            List <GetCategoryDTO> response = db.Categories
                     .Select(o => new GetCategoryDTO
                     {
                         ID = o.ID,
@@ -70,8 +52,6 @@ namespace Awards.Controllers
                                     .Select(r => new GetNominationDTO
                                     {
                                         ID = r.ID,
-                                        Anonymous = r.Anonymous,
-                                        Nominator = r.Nominator,
                                         NomineeID = r.NomineeID,
                                         Reason = r.Reason
                                     }).ToList(),
@@ -86,26 +66,18 @@ namespace Awards.Controllers
                             }).ToList()
                     }).ToList();
             response.ForEach(o => o.HasVoted = o.Nominees.Any(p => p.Vote != null));
-            return response;
-        }
-
-        // GET: api/Categories/5
-        [ResponseType(typeof(Category))]
-        public async Task<IHttpActionResult> GetCategory(int id)
-        {
-            Category category = await db.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(category);
+            return Ok(response);
         }
 
         // PUT: api/Categories/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCategory(int id, Category category)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -141,6 +113,11 @@ namespace Awards.Controllers
         [ResponseType(typeof(Category))]
         public async Task<IHttpActionResult> PostCategory(Category category)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -156,6 +133,11 @@ namespace Awards.Controllers
         [ResponseType(typeof(Category))]
         public async Task<IHttpActionResult> DeleteCategory(int id)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
             Category category = await db.Categories.FindAsync(id);
             if (category == null)
             {
