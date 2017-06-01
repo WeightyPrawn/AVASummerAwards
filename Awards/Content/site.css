@@ -6,7 +6,12 @@ nav {
     margin: 0 auto;
 }
 
-a:focus {
+h2 {
+    margin: 0;
+    text-align: center;
+}
+
+a:focus, a:hover {
     text-decoration: none;
 }
 
