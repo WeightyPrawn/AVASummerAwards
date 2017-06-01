@@ -12,9 +12,11 @@ using System.Web.Http.Description;
 using Awards.DAL;
 using Awards.Models;
 using System.Web.Http.Cors;
+using System.Security.Claims;
 
 namespace Awards.Controllers
 {
+    [Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class VotesController : ApiController
     {
@@ -76,8 +78,9 @@ namespace Awards.Controllers
 
         // POST: api/Votes
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PostVote(string user, SetVoteDTO vote)
+        public async Task<IHttpActionResult> PostVote(SetVoteDTO vote)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -104,8 +107,9 @@ namespace Awards.Controllers
 
         // DELETE: api/Votes/5
         [ResponseType(typeof(Vote))]
-        public async Task<IHttpActionResult> DeleteVote(string user, int id)
+        public async Task<IHttpActionResult> DeleteVote(int id)
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             Vote vote = await db.Votes.FindAsync(id);
             if (vote == null)
             {

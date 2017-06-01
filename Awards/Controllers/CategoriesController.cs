@@ -12,10 +12,11 @@ using System.Web.Http.Description;
 using Awards.DAL;
 using Awards.Models;
 using System.Web.Http.Cors;
+using System.Security.Claims;
 
 namespace Awards.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CategoriesController : ApiController
     {
@@ -47,8 +48,10 @@ namespace Awards.Controllers
         }*/
         // GET: api/Categories
         [HttpGet, ActionName("categories")]
-        public IEnumerable<GetCategoryDTO> GetCategories(string user)
+        public IEnumerable<GetCategoryDTO> GetCategories()
         {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            // var name = ClaimsPrincipal.Current.FindFirst("name").Value;
             List<GetCategoryDTO> response = db.Categories
                     .Select(o => new GetCategoryDTO
                     {

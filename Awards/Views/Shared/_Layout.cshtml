@@ -27,8 +27,8 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" ng-click="logout()">Log out</a></li>
-                        <li><a href="#" ng-click="login()">Login</a></li>
+                        <li><a href="#" ng-show="userInfo.isAuthenticated" ng-click="logout()">Log out</a></li>
+                        <li><a href="#" ng-show="!userInfo.isAuthenticated" ng-click="login()">Login</a></li>
                     </ul>
                 </div>
             </div>

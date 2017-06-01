@@ -45,19 +45,20 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
         $scope.vote = VoteService.vote;
         $scope.removeVote = VoteService.removeVote;
 
-    }]).controller('MainController', ['$scope', '$rootScope', 'adalAuthenticationService', function ($scope, $rootScope, adalService) {
+    }]).controller('MainController', ['$scope', '$rootScope', 'adalAuthenticationService', '$location', function ($scope, $rootScope, adalService, $location) {
         $scope.logout = function () {
-            adalService.logOut();
+            adalService.logOut().then(function () {
+                console.log("hej");
+            });
         };
         $scope.login = function () {
-            adalService.login();
+            $location.path('/App');
             console.log($rootScope.userInfo)
         };
     }])
     .factory('VoteService', ['$http', function ($http) {
-        var data = {
-            user: 'kalkon'
-        };
+        var apiBaseUrl = 'https://localhost:44375/';
+        var data = {};
 
         var URLS = {
             CATEGORIES: '/api/Categories',
@@ -68,7 +69,7 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
             getData();
         };
         function getData() {
-            $http.get(URLS.CATEGORIES + '?user=' + data.user).success(function (resp) {
+            $http.get(apiBaseUrl + URLS.CATEGORIES).success(function (resp) {
                 data.categories = resp;
                 console.log(data);
             });
@@ -82,7 +83,7 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
                     NomineeID: nomination.ID || 1
                 };
 
-                $http.post(URLS.VOTE + "?user=" + data.user, reqModel)
+                $http.post(apiBaseUrl + URLS.VOTE, reqModel)
                     .then(function successCallback(response) {
                         // this callback will be called asynchronously
                         // when the response is available
@@ -97,7 +98,7 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
             removeVote: function (nomination) {
                 console.log(nomination);
 
-                return $http.delete(URLS.VOTE + "/" + nomination.Vote.ID + "?user=" + data.user)
+                return $http.delete(apiBaseUrl + URLS.VOTE + "/" + nomination.Vote.ID)
                 .then(function successCallback(response) {
                     // this callback will be called asynchronously
                     // when the response is available
