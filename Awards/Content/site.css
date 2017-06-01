@@ -32,9 +32,3 @@ main {
     display: flex;
     align-items: center;
 }
-
-@media (max-width: 450px) {
-  .hidden-xxs {
-    display: none !important;
-  }
-}

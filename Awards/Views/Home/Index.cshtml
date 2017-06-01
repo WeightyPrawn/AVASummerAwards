@@ -9,21 +9,21 @@
                        data-parent="#accordion" href="#collapse-{{$parent.$index}}-{{$index}}" aria-expanded="false"
                        aria-controls="collapse-{{$parent.$index}}-{{$index}}">
                         <div class="row vertical-align">
-                            <div class="col-xs-4 hidden-xxs" style="padding-left:0">
+                            <div class="col-sm-4 hidden-xs" style="padding-left:0">
                                 <img ng-src="{{nominee.Image}}"
                                      class="img-responsive img-circle">
                             </div>
-                            <h4 class="panel-title col-xs-8" style="padding:6px">
+                            <h4 class="panel-title col-xs-12 col-sm-8">
                                 {{nominee.Name}}
                             </h4>
                         </div>
                     </a>
-                    <button class="col-xs-3 col-sm-2 btn btn-default" data-ng-click="ctrl.vote(nominee)"
-                            data-ng-hide="category.HasVoted">
+                    <button class="col-xs-3 col-sm-2 btn btn-default" ng-click="ctrl.vote(nominee)"
+                            ng-hide="category.HasVoted">
                         Vote
                     </button>
-                    <button class="col-xs-3 col-sm-2 btn btn-danger" data-ng-click="ctrl.removeVote(nominee)"
-                            data-ng-show="nominee.Vote !== null">
+                    <button class="col-xs-3 col-sm-2 btn btn-danger" ng-click="ctrl.removeVote(nominee)"
+                            ng-show="nominee.Vote !== null">
                         Undo
                     </button>
                 </div>

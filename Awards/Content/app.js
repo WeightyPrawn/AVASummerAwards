@@ -57,7 +57,7 @@ angular.module('AvaSummerAwards', [])
             removeVote: function (nomination) {
                 console.log(nomination);
 
-                return $http.delete(URLS.VOTE + "/" + nomination.Vote.ID + "/?user=" + data.user)
+                return $http.delete(URLS.VOTE + "/" + nomination.Vote.ID + "?user=" + data.user)
                 .then(function successCallback(response) {
                     // this callback will be called asynchronously
                     // when the response is available
