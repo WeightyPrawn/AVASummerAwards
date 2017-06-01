@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="~/Content/site.css" rel="stylesheet" />
 </head>
-<body>
+<body ng-app="AvaSummerAwards" ng-controller="MainController">
     <header>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -27,7 +27,8 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Log out</a></li>
+                        <li><a href="#" ng-click="logout()">Log out</a></li>
+                        <li><a href="#" ng-click="login()">Login</a></li>
                     </ul>
                 </div>
             </div>
@@ -35,10 +36,16 @@
     </header>
     <main>
         @RenderBody()
+        <div ng-view class="panel-body">
+
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="https://code.angularjs.org/1.2.25/angular-route.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
                 crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="~/Content/adal.js"></script>
+        <script src="~/Content/adal-angular.js"></script>
         <script src="~/Content/app.js"></script>
     </main>
     <footer class="container">
