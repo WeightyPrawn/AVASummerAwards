@@ -49,3 +49,7 @@ h4.panel-title {
         padding-left: 15px;
     }
 }
+
+.img-circle {
+    max-width: 100px;
+}
