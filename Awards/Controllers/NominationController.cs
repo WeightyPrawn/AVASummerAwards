@@ -89,7 +89,7 @@ namespace Awards.Controllers
                 o => o.CategoryID == nominee.CategoryID && o.Email == nominee.NomineeEmail);
             if (existingNominee != null)
             {
-                if(existingNominee.Nominations.Any(o => o.Nominator == user) && !IsAdmin)
+                if (existingNominee.Nominations.Any(o => o.Nominator == user) && !IsAdmin)
                 {
                     var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
                     response.ReasonPhrase = "You have already nominated this person in this category";
@@ -110,7 +110,7 @@ namespace Awards.Controllers
                 {
                     CategoryID = nominee.CategoryID,
                     Email = nominee.NomineeEmail,
-                    Name  = nominee.NomineeName,
+                    Name = nominee.NomineeName,
                     Image = nominee.NoineeImage,
                     Nominations = new List<Nomination>()
                 };
@@ -126,6 +126,70 @@ namespace Awards.Controllers
             }
             await db.SaveChangesAsync();
 
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("api/Nominations")]
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> AddNominations(IEnumerable<SetNomineeDTO> nominees)
+        {
+            var user = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            if (!AuthHelper.IsAdminUser(user))
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                IsAdmin = true;
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            foreach (SetNomineeDTO nominee in nominees)
+            {
+                var existingNominee = db.Nominees.FirstOrDefault(
+                    o => o.CategoryID == nominee.CategoryID && o.Email == nominee.NomineeEmail);
+                if (existingNominee != null)
+                {
+                    if (existingNominee.Nominations.Any(o => o.Nominator == user) && !IsAdmin)
+                    {
+                        var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                        response.ReasonPhrase = "You have already nominated this person in this category";
+                        return ResponseMessage(response);
+                    }
+                    var newNomination = new Nomination
+                    {
+                        NomineeID = existingNominee.ID,
+                        Anonymous = nominee.Nomination.Anonymous,
+                        Nominator = user,
+                        Reason = nominee.Nomination.Reason
+                    };
+                    db.Nominations.Add(newNomination);
+                }
+                else
+                {
+                    var newNominee = new Nominee
+                    {
+                        CategoryID = nominee.CategoryID,
+                        Email = nominee.NomineeEmail,
+                        Name = nominee.NomineeName,
+                        Image = nominee.NoineeImage,
+                        Nominations = new List<Nomination>()
+                    };
+                    newNominee.Nominations.Add(new Nomination
+                    {
+
+                        Anonymous = nominee.Nomination.Anonymous,
+                        Nominator = user,
+                        Reason = nominee.Nomination.Reason
+                    });
+
+                    db.Nominees.Add(newNominee);
+                }
+                await db.SaveChangesAsync();
+            }
             return Ok();
         }
 
