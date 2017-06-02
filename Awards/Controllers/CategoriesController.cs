@@ -34,7 +34,7 @@ namespace Awards.Controllers
                 return Unauthorized();
             }
             // var name = ClaimsPrincipal.Current.FindFirst("name").Value;
-            List <GetCategoryDTO> response = db.Categories
+            List<GetCategoryDTO> response = db.Categories
                     .Select(o => new GetCategoryDTO
                     {
                         ID = o.ID,
@@ -66,6 +66,7 @@ namespace Awards.Controllers
                             }).ToList()
                     }).ToList();
             response.ForEach(o => o.HasVoted = o.Nominees.Any(p => p.Vote != null));
+            response.ForEach(o => o.Nominees = o.Nominees.Shuffle());
             return Ok(response);
         }
 

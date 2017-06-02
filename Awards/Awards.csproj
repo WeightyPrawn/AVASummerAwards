@@ -189,6 +189,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AuthHelper.cs" />
+    <Compile Include="Helpers\EnumerableExtensions.cs" />
+    <Compile Include="Helpers\ThreadSafeRandom.cs" />
     <Compile Include="Models\GetCategoryDTO.cs" />
     <Compile Include="Models\SetNomineeDTO.cs" />
     <Compile Include="Models\SetNominationDTO.cs" />
