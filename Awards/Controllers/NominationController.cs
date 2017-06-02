@@ -111,7 +111,8 @@ namespace Awards.Controllers
                     CategoryID = nominee.CategoryID,
                     Email = nominee.NomineeEmail,
                     Name  = nominee.NomineeName,
-                    Image = nominee.NoineeImage
+                    Image = nominee.NoineeImage,
+                    Nominations = new List<Nomination>()
                 };
                 newNominee.Nominations.Add(new Nomination
                 {
