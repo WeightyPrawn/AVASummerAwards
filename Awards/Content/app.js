@@ -26,6 +26,7 @@ angular.module('AvaSummerAwards', ['ngRoute', 'AdalAngular'])
                     instance: 'https://login.microsoftonline.com/',
                     tenant: 'common', //for multi-tenant
                     clientId: '884c99db-e371-4707-be34-56b1c064db0f', //copy from Azure active directory application for this client
+                    extraQuerryParameter: 'nux=1',
                     endpoints: endpoints
                     //cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
                 },

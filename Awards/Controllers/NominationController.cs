@@ -21,6 +21,7 @@ namespace Awards.Controllers
     public class NominationController : ApiController
     {
         private AwardsContext db = new AwardsContext();
+        private bool IsAdmin = false;
         /*
         [HttpGet]
         public List<GetCategoryDTO> GetNominationsForUser()
@@ -75,6 +76,10 @@ namespace Awards.Controllers
             {
                 return Unauthorized();
             }
+            else
+            {
+                IsAdmin = true;
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -84,7 +89,7 @@ namespace Awards.Controllers
                 o => o.CategoryID == nominee.CategoryID && o.Email == nominee.NomineeEmail);
             if (existingNominee != null)
             {
-                if(existingNominee.Nominations.Any(o => o.Nominator == user))
+                if(existingNominee.Nominations.Any(o => o.Nominator == user) && !IsAdmin)
                 {
                     var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
                     response.ReasonPhrase = "You have already nominated this person in this category";
@@ -105,7 +110,8 @@ namespace Awards.Controllers
                 {
                     CategoryID = nominee.CategoryID,
                     Email = nominee.NomineeEmail,
-                    Name = "", //TODO: Get name from AD based on Email.
+                    Name  = nominee.NomineeName,
+                    Image = nominee.NoineeImage
                 };
                 newNominee.Nominations.Add(new Nomination
                 {
