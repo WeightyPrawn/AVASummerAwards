@@ -20,7 +20,7 @@ namespace Awards
             GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterFilters(GlobalFilters.Filters);
-
+            //Halloj
         }
     }
 }
