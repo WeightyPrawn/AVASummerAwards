@@ -34,23 +34,39 @@ namespace Awards.Controllers
                 return Unauthorized();
             }
             // var name = ClaimsPrincipal.Current.FindFirst("name").Value;
-            List<GetCategoryDTO2> response = db.Categories
-                    .Select(o => new GetCategoryDTO2
+            List<GetCategoryDTO> response = db.Categories
+                    .Select(o => new GetCategoryDTO
                     {
+                        ID = o.ID,
                         Name = o.Name,
+                        Description = o.Description,
                         Nominees = o.Nominees
-                            .Select(p => new GetNomineeDTO2
+                            .Select(p => new GetNomineeDTO
                             {
+                                ID = p.ID,
+                                CategoryID = p.CategoryID,
+                                Email = p.Email,
                                 Name = p.Name,
-                                Vote = p.Votes
-                                    .Select(r => new GetVoteDTO2
+                                Image = p.Image,
+                                Nominations = p.Nominations
+                                    .Select(r => new GetNominationDTO
                                     {
-                                         Voter = r.Voter
-                                    }),
-                                TotalVotes = p.Votes.Count()
+                                        ID = r.ID,
+                                        NomineeID = r.NomineeID,
+                                        Reason = r.Reason
+                                    }).ToList(),
+                                Vote = p.Votes
+                                    .Where(q => q.Voter == user)
+                                    .Select(r => new GetVoteDTO
+                                    {
+                                        ID = r.ID,
+                                        NomineeID = r.NomineeID,
+                                        Voter = r.Voter
+                                    }).FirstOrDefault()
                             }).ToList()
                     }).ToList();
-            response.ForEach(o => o.Nominees = o.Nominees.OrderBy(p => p.TotalVotes));
+            response.ForEach(o => o.HasVoted = o.Nominees.Any(p => p.Vote != null));
+            response.ForEach(o => o.Nominees = o.Nominees.Shuffle());
             return Ok(response);
         }
 

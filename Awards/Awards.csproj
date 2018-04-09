@@ -191,10 +191,7 @@
     <Compile Include="Helpers\AuthHelper.cs" />
     <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="Helpers\ThreadSafeRandom.cs" />
-    <Compile Include="Models\GetCategoryDTO2.cs" />
     <Compile Include="Models\GetCategoryDTO.cs" />
-    <Compile Include="Models\GetNomineeDTO2.cs" />
-    <Compile Include="Models\GetVoteDTO2.cs" />
     <Compile Include="Models\SetNomineeDTO.cs" />
     <Compile Include="Models\SetNominationDTO.cs" />
     <Compile Include="Models\GetNominationDTO.cs" />

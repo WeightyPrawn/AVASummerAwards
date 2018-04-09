@@ -13,7 +13,6 @@ namespace Awards.Models
         public string Name { get; set; }
         public string Image { get; set; }
         public IEnumerable<GetNominationDTO> Nominations { get; set; }
-        public IEnumerable<GetVoteDTO> Vote { get; set; }
-        public int TotalVotes { get; set; }
+        public GetVoteDTO Vote { get; set; }
     }
 }
